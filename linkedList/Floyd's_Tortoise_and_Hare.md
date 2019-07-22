@@ -3,7 +3,7 @@
 ## Phase 1
 We initialize two pointers - the fast hare and the slow tortoise. Then, until hare can no longer advance, we increment tortoise once and hare twice. If, after advancing them, hare and tortoise point to the same node, we return it. Otherwise, we continue. If the while loop terminates without returning a node, then the list is acyclic, and we return null to indicate as much.
 
-https://gyazo.com/65fedb729ccaa076c150878f6794e8af
+![](https://leetcode.com/problems/linked-list-cycle-ii/Figures/142/Slide1.PNG)
 
 Here, the nodes in the cycle have been labelled from 0 to $C-1$, where $C$ is the length of the cycle. The noncyclic nodes have been labelled from $-F$ to $-1$, where $F$ is the number of nodes outside of the cycle. After $F$ iterations, tortoise points to node 0 and hare points to some node $h$, where $F \equiv h \pmod CF≡h(modC)$. This is because hare traverses $2F$ nodes over the course of $F$ iterations, exactly $F$ of which are in the cycle. After $C-h$ more iterations, tortoise obviously points to node $C-h$, but (less obviously) hare also points to the same node. To see why, remember that hare traverses $2(C-h)$ from its starting position of $h$:
 $$
@@ -18,11 +18,15 @@ Given that phase 1 finds an intersection, phase 2 proceeds to find the node that
 
 Use the diagram below to help understand the proof of this approach's correctness.
 
-https://leetcode.com/problems/linked-list-cycle-ii/Figures/142/diagram.png
+![](https://leetcode.com/problems/linked-list-cycle-ii/Figures/142/diagram.png)
 
 We can harness the fact that hare moves twice as quickly as tortoise to assert that when hare and tortoise meet at node hh, hare has traversed twice as many nodes. Using this fact, we deduce the following:
 $
-\begin{aligned} 2 \cdot distance(tortoise) &= distance(hare) \\ 2(F+a) &= F+a+b+a \\ 2F+2a &= F+2a+b \\ F &= b \\ \end{aligned}
+\begin{aligned} 2 \cdot distance(tortoise) &= distance(hare) \\ 2(F+a) &= F+nc+a \\ F+a &= nc \\ F &= b \\ \end{aligned}
 $
 
-Because $F=b$, pointers starting at nodes $h$ and $0$ will traverse the same number of nodes before meeting.
+Because
+$
+F+a+(F mod C) = F+a+(nC - a)mod C = F+(a + nC - a)modC = F
+$
+, pointers starting at nodes $h$ and $0$ will traverse the same number of nodes before meeting.
